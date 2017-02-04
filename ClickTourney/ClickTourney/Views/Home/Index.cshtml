@@ -2,30 +2,41 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+@{ 
+    if (Request.IsAuthenticated)
+    {
+        <h1>Welcome!</h1>
+    }
+    else
+    {
+        <img src="~/Content/logo.png" class="splash-logo" />
+        <div class="splash-nav">
+            <div class="">
+                <p><a class="btn btn-lg btn-default tourney-btn" href="/Account/Login">Login</a></p>
+            </div>
+            <div class="">
+                <p><a class="btn btn-lg btn-default tourney-btn" href="/Account/Register">Register</a></p>
+            </div>
+        </div>
+        <div style="margin-top:100px;">
+            <div class="row">
+                <div class="col-lg-4 splash-item">
+                    <h1>Simple</h1>
+                    <img src="~/Content/atob.png" class="splash-img" />
+                    <p>Built by players, for players, ClickTourney enables you to manage your tournament by removing all the hassle involved in keeping track of the details.</p>
+                </div>
+                <div class="col-lg-4 splash-item">
+                    <h1>Robust</h1>
+                    <img src="~/Content/Lampanyctodes_hectoris_(Hector's_lanternfish)2.png" class="splash-img" />
+                    <p>Many different tournament styles are supported. Whether your managing a small tournament with friends or a larger seasonal competition, ClickTourney has all the tools you need!</p>
+                </div>
+                <div class="col-lg-4 splash-item">
+                    <h1>Fun</h1>
+                    <img src="~/Content/thumbsup.png" class="splash-img" />
+                    <p>Let's face it, you'd rather spend more time playing than managing the nitty gritty details of your tournament (unless you're into that kind of thing). That's why we created this website!</p>
+                </div>
+            </div>
+        </div>
+    }
+}
