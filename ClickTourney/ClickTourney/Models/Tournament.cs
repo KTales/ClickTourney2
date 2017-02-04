@@ -14,7 +14,23 @@ namespace ClickTourney.Models
             Matches = new List<Match>();
         }
 
-        public void buildRoundRobin()
+        public void createMatches()
+        {
+            switch (TournamentType)
+            {
+                case "Round Robin":
+                    buildRoundRobin();
+                    break;
+                case "Double Round Robin":
+                    buildRoundRobin(true);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        public void buildRoundRobin(bool isDouble = false)
         {
             List<string> players = new List<string>();
             for (int i = 1; i <= PlayerCount; i++)
@@ -26,7 +42,6 @@ namespace ClickTourney.Models
                 players.Add("Bye");
 
             int playersCount = players.Count;
-            int matchesPer = playersCount - 1;
 
             // Our new way
             List<string> aPlayers = new List<string>();
@@ -34,6 +49,11 @@ namespace ClickTourney.Models
             aPlayers.AddRange(players.Take(playersCount / 2));
             bPlayers.AddRange(players.Skip(playersCount / 2).Take(playersCount / 2));
             int arrLength = aPlayers.Count;
+
+            int matchesPer = playersCount - 1;
+
+            if (isDouble)
+                matchesPer *= 2;
 
             for (; matchesPer > 0; matchesPer--)
             {

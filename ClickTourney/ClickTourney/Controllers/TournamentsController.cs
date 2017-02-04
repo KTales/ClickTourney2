@@ -56,7 +56,7 @@ namespace ClickTourney.Controllers
 
             if (ModelState.IsValid)
             {
-                tournament.buildRoundRobin();
+                tournament.createMatches();
                 db.Tournaments.Add(tournament);
                 db.SaveChanges();
                 return RedirectToAction("Index");
