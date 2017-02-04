@@ -17,7 +17,7 @@ namespace ClickTourney.Models
         public void buildRoundRobin()
         {
             List<string> players = new List<string>();
-            for (int i = 1; i <= TypoHere; i++)
+            for (int i = 1; i <= PlayerCount; i++)
             {
                 players.Add("Player " + i);
             }
@@ -59,7 +59,8 @@ namespace ClickTourney.Models
 
         [Range(2, int.MaxValue, ErrorMessage = "Please enter a number between 3 and 20")]
         [Required]
-        public int TypoHere { get; set; }
+        [DisplayName("# of Participants")]
+        public int PlayerCount { get; set; }
 
         [DisplayName("Type")]
         public string TournamentType { get; set; }
