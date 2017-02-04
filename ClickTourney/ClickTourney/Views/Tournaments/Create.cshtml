@@ -24,17 +24,17 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.TypoHere, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PlayerCount, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TypoHere, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TypoHere, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.PlayerCount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PlayerCount, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.TournamentType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.TournamentType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.TournamentType, new SelectList((IEnumerable<string>)ViewData["ValidTypes"]), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.TournamentType, "", new { @class = "text-danger" })
             </div>
         </div>
