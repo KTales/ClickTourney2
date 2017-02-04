@@ -17,7 +17,6 @@ namespace ClickTourney.Controllers
         // GET: Tournaments
         public ActionResult Index()
         {
-			int a = 1 + 1;
             return View(db.Tournaments.ToList());
         }
 
