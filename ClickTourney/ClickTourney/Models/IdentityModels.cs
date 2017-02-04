@@ -29,5 +29,7 @@ namespace ClickTourney.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<ClickTourney.Models.Tournament> Tournaments { get; set; }
     }
 }
