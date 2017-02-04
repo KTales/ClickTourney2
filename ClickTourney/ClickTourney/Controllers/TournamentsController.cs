@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ClickTourney.Models;
+using Microsoft.AspNet.Identity;
 
 namespace ClickTourney.Controllers
 {
@@ -38,7 +39,7 @@ namespace ClickTourney.Controllers
         // GET: Tournaments/Create
         public ActionResult Create()
         {
-            IEnumerable<string> ValidTypes = new List<string> { "Round Robin", "Test" };
+            IEnumerable<string> ValidTypes = new List<string> { "Round Robin", "Double Round Robin" };
             ViewData["ValidTypes"] = ValidTypes;
             return View();
         }
@@ -50,8 +51,12 @@ namespace ClickTourney.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType")] Tournament tournament)
         {
+            string ownerId = User.Identity.GetUserId();
+            tournament.Owner = db.Users.FirstOrDefault(x => x.Id == ownerId);
+
             if (ModelState.IsValid)
             {
+                tournament.buildRoundRobin();
                 db.Tournaments.Add(tournament);
                 db.SaveChanges();
                 return RedirectToAction("Index");
