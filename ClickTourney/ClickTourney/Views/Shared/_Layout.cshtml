@@ -41,20 +41,25 @@
 
             
             <div class="tourney-sidebar">
-                <img src="~/Content/logo.png" style="max-width:100%;"/>
-                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                <a href="/Home"><img src="~/Content/logo.png" style="max-width:100%; display:block;" /></a>
+                @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                 {
                 @Html.AntiForgeryToken()
 
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-                    </li>
-                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-                </ul>
+                    <ul class="nav tourney-nav" >
+                        <li><a href="/Tournaments">My Tournaments</a></li>
+                        <li><a href="/Tournaments/Create">New Tournament</a></li>
+                        <li>@Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                    </ul>
+                    
+                    
+                
                 }
             </div>
-            @RenderBody()
+            <div class="tourney-body">
+                @RenderBody()
+            </div>
         }
         else
         {

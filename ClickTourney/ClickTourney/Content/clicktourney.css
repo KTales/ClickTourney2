@@ -38,10 +38,6 @@
     color:#00b0f0;
 }
 
-.navbar-logo {
-    height:45px;
-    padding:5px 10px;
-}
 
 .tourney-btn-login {
     margin:auto;
@@ -63,8 +59,29 @@
     overflow-x:hidden;
     background-color:#E6E6E6;
     
-    border-right-style:solid;
+    border-right-style:double;
     border-color:#00b0f0;
-    border-right-width:5px;
+    border-right-width:16px;
     padding:10px;
+}
+
+.tourney-body {
+    margin-left:300px;
+
+}
+
+.tourney-nav {
+    margin-top:20px;
+    max-width:100%;
+}
+
+#bootstrap-overrides .tourney-nav a{
+    color:#00b0f0; 
+    transition:0.5s;   
+}
+
+#bootstrap-overrides .tourney-nav a:hover{
+    background-color:#00b0f0;
+    color:white;    
+    transition:0.5s;
 }
