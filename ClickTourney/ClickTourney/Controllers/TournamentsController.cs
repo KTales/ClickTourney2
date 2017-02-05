@@ -39,7 +39,7 @@ namespace ClickTourney.Controllers
         // GET: Tournaments/Create
         public ActionResult Create()
         {
-            IEnumerable<string> ValidTypes = new List<string> { "Round Robin", "Double Round Robin" };
+            IEnumerable<string> ValidTypes = new List<string> { "Round Robin", "Double Round Robin", "Elimination" };
             ViewData["ValidTypes"] = ValidTypes;
             return View();
         }
