@@ -56,8 +56,8 @@ namespace ClickTourney.Controllers
 
             if (ModelState.IsValid)
             {
-                tournament.createMatches();
                 db.Tournaments.Add(tournament);
+                tournament.createMatches();
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

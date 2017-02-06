@@ -49,7 +49,7 @@ namespace ClickTourney.Models
             int numByes = powerOfTwo - PlayerCount;
 
             // Add byes to tourney
-            for(int i = 0; i < numByes; ++i)
+            for (int i = 0; i < numByes; ++i)
             {
                 players.Add("Bye");
             }
@@ -62,12 +62,12 @@ namespace ClickTourney.Models
             List<string> aPlayers = new List<string>();
             List<string> bPlayers = new List<string>();
             aPlayers.AddRange(players.Take(totalPlayers / 2));
-            bPlayers.AddRange(players.Skip(totalPlayers / 2).Take(totalPlayers/2).Reverse());
+            bPlayers.AddRange(players.Skip(totalPlayers / 2).Take(totalPlayers / 2).Reverse());
 
             //Create all of the matches
-            List<Match> lastRound = new List<Match>();
+            List<Match> lastRoundMatches = new List<Match>();
             int playerIdx = 0;
-            for(int round = 1;round <= roundCount; ++round)
+            for (int round = 1; round <= roundCount; ++round)
             {
                 totalPlayers /= 2;
                 int playersThisRound = totalPlayers;
@@ -85,15 +85,15 @@ namespace ClickTourney.Models
                     {
                         // If not the first round, get the ids of the matches that feed into current from last round
                         // TODO: This does not work because the objects being stored in lasRound do not have ID's until they are saved to db
-                        currentRound.Add(new Match(lastRound[currentRound.Count * 2].MatchId, lastRound[currentRound.Count * 2].MatchId + 1));
+                        currentRound.Add(new Match(lastRoundMatches[currentRound.Count * 2], lastRoundMatches[currentRound.Count * 2 + 1]));
                     }
                 }
-
-                foreach(Match match in currentRound)
+                lastRoundMatches.Clear();
+                foreach (Match match in currentRound)
                 {
                     Matches.Add(match);
+                    lastRoundMatches.Add(match);
                 }
-                lastRound = currentRound;
             }
         }
 

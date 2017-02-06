@@ -25,6 +25,14 @@ namespace ClickTourney.Models
         {
         }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Match>().HasKey(d => d.MatchId)
+                .HasOptional(m => m.PriorMatch2).WithOptionalPrincipal(d => d.PriorMatch1);
+            base.OnModelCreating(modelBuilder);
+        }
+        public DbSet<Match> Matches { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
