@@ -16,12 +16,14 @@ namespace ClickTourney.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Tournaments
+        [Authorize]
         public ActionResult Index()
         {
             return View(db.Tournaments.ToList());
         }
 
         // GET: Tournaments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,9 +39,10 @@ namespace ClickTourney.Controllers
         }
 
         // GET: Tournaments/Create
+        [Authorize]
         public ActionResult Create()
         {
-            IEnumerable<string> ValidTypes = new List<string> { "Round Robin", "Double Round Robin" };
+            IEnumerable<string> ValidTypes = new List<string> { "Round Robin", "Double Round Robin", "Elimination" };
             ViewData["ValidTypes"] = ValidTypes;
             return View();
         }
@@ -49,6 +52,7 @@ namespace ClickTourney.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType")] Tournament tournament)
         {
             string ownerId = User.Identity.GetUserId();
@@ -56,8 +60,8 @@ namespace ClickTourney.Controllers
 
             if (ModelState.IsValid)
             {
-                tournament.createMatches();
                 db.Tournaments.Add(tournament);
+                tournament.createMatches();
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -66,6 +70,7 @@ namespace ClickTourney.Controllers
         }
 
         // GET: Tournaments/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -85,6 +90,7 @@ namespace ClickTourney.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType")] Tournament tournament)
         {
             if (ModelState.IsValid)
@@ -97,6 +103,7 @@ namespace ClickTourney.Controllers
         }
 
         // GET: Tournaments/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -114,6 +121,7 @@ namespace ClickTourney.Controllers
         // POST: Tournaments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Tournament tournament = db.Tournaments.Find(id);
