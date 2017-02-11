@@ -41,17 +41,24 @@
         <dd>
             <table class="table">
                 <tr>
-                    <th>Player 1</th>
-                    <th>Player 2</th>
+                    <th>Match #</th>
+                    <th>Competitors</th>
                 </tr>
                 @foreach (var match in Model.Matches)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => match.Player1)
+                            @Html.DisplayFor(modelItem => match.MatchNumber)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => match.Player2)
+                            @if (match.Player1 != null)
+                            {
+                                @Html.DisplayFor(modelItem => match.Player1)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2)
+                            }
+                            else
+                            {
+                                <text>Waiting for match </text>@Html.DisplayFor(modelItem => match.PreviousMatch1)<text> and </text> @Html.DisplayFor(modelItem => match.PreviousMatch2)
+                            }
                         </td>
                     </tr>
                 }

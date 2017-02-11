@@ -17,18 +17,29 @@ namespace ClickTourney.Models
                 Completed = true;
         }
 
-        public Match(Match game1, Match game2)
+        public Match(string player1, string player2, int matchNumber)
         {
-            this.PriorMatch1 = game1;
-            this.PriorMatch2 = game2;
+            this.Player1 = player1;
+            this.Player2 = player2;
+            this.MatchNumber = matchNumber;
+            if (player2 == "Bye")
+                Completed = true;
+        }
+
+        public Match(int matchNumber, int prevMatch1, int prevMatch2)
+        {
+            this.MatchNumber = matchNumber;
+            this.PreviousMatch1 = prevMatch1;
+            this.PreviousMatch2 = prevMatch2;
         }
 
         public int MatchId { get; set; }
         public string Player1 { get; set; }
         public string Player2 { get; set; }
         public bool Completed { get; set; }
-        public virtual Match PriorMatch1 { get; set; }
-        public virtual Match PriorMatch2 { get; set; }
+        public int MatchNumber { get; set; }
+        public int PreviousMatch1 { get; set; }
+        public int PreviousMatch2 { get; set; }
         public virtual Tournament Tournament { get; set; }
     }
 }

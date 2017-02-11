@@ -65,34 +65,35 @@ namespace ClickTourney.Models
             bPlayers.AddRange(players.Skip(totalPlayers / 2).Take(totalPlayers / 2).Reverse());
 
             //Create all of the matches
-            List<Match> lastRoundMatches = new List<Match>();
+            List<int> lastRoundMatches = new List<int>();
+            int matchCount = 1;
             int playerIdx = 0;
             for (int round = 1; round <= roundCount; ++round)
             {
                 totalPlayers /= 2;
-                int playersThisRound = totalPlayers;
+                int matchesThisRound = totalPlayers;
                 List<Match> currentRound = new List<Match>();
 
-                for (; playersThisRound > 0; --playersThisRound)
+                for (int i = 0; i < matchesThisRound; ++i)
                 {
                     // If this is the first round, set all of the names
                     if (round == 1)
                     {
-                        currentRound.Add(new Match(aPlayers[playerIdx], bPlayers[playerIdx]));
+                        currentRound.Add(new Match(aPlayers[playerIdx], bPlayers[playerIdx], matchCount));
                         playerIdx++;
                     }
                     else
                     {
                         // If not the first round, get the ids of the matches that feed into current from last round
-                        // TODO: This does not work because the objects being stored in lasRound do not have ID's until they are saved to db
-                        currentRound.Add(new Match(lastRoundMatches[currentRound.Count * 2], lastRoundMatches[currentRound.Count * 2 + 1]));
+                        currentRound.Add(new Match(matchCount, lastRoundMatches[currentRound.Count * 2], lastRoundMatches[currentRound.Count * 2 + 1]));
                     }
+                    matchCount++;
                 }
                 lastRoundMatches.Clear();
                 foreach (Match match in currentRound)
                 {
                     Matches.Add(match);
-                    lastRoundMatches.Add(match);
+                    lastRoundMatches.Add(match.MatchNumber);
                 }
             }
         }
@@ -122,11 +123,14 @@ namespace ClickTourney.Models
             if (isDouble)
                 matchesPer *= 2;
 
+            int matchCount = 1;
+
             for (; matchesPer > 0; matchesPer--)
             {
                 for (int game = 0; game < arrLength; game++)
                 {
-                    Matches.Add(new Match(aPlayers[game], bPlayers[game]));
+                    Matches.Add(new Match(aPlayers[game], bPlayers[game], matchCount));
+                    matchCount++;
                 }
                 bPlayers.Add(aPlayers[arrLength - 1]);
                 aPlayers.RemoveAt(arrLength - 1);
