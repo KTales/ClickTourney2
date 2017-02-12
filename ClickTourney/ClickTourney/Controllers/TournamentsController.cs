@@ -19,7 +19,8 @@ namespace ClickTourney.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View(db.Tournaments.ToList());
+            string currentUserId = User.Identity.GetUserId();
+            return View(db.Tournaments.Where(t => t.Owner.Id == currentUserId).ToList());
         }
 
         // GET: Tournaments/Details/5
