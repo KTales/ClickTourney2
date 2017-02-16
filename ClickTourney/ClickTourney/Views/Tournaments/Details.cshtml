@@ -33,7 +33,37 @@
         <dd>
             @Html.DisplayFor(model => model.TournamentType)
         </dd>
+        <br />
+        <dd>
+        <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
+        </dd>
 
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Match #</th>
+                    <th>Competitors</th>
+                </tr>
+                @foreach (var match in Model.Matches)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => match.MatchNumber)
+                        </td>
+                        <td>
+                            @if (match.Player1 != null)
+                            {
+                                @Html.DisplayFor(modelItem => match.Player1)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2)
+                            }
+                            else
+                            {
+                                <text>Waiting for match </text>@Html.DisplayFor(modelItem => match.PreviousMatch1)<text> and </text> @Html.DisplayFor(modelItem => match.PreviousMatch2)
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
     </dl>
 </div>
 <p>

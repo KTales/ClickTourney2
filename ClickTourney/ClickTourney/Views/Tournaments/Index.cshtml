@@ -4,42 +4,51 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h1>My Tournaments</h1>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PlayerCount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TournamentType)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PlayerCount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TournamentType)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TournamentId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TournamentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TournamentId })
-        </td>
-    </tr>
+@if (!Model.Any())
+{
+    <h2>You have not created any tournaments yet!</h2>
+    <h3>Create one now! @Html.ActionLink("Click Here!", "Create")</h3>
 }
+else
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlayerCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TournamentType)
+            </th>
+            <th></th>
+        </tr>
 
-</table>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerCount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TournamentType)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.TournamentId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.TournamentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.TournamentId })
+            </td>
+        </tr>
+    }
+
+    </table>
+}

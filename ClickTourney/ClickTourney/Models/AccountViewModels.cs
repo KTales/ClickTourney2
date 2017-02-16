@@ -69,8 +69,10 @@ namespace ClickTourney.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        private static int MinLength;
+
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = Globals.PASSWORD_MIN_LENGTH)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -89,7 +91,7 @@ namespace ClickTourney.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = Globals.PASSWORD_MIN_LENGTH)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }

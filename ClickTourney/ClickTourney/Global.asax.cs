@@ -18,4 +18,16 @@ namespace ClickTourney
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
+
+    /// <summary>
+    /// Contains global variables for use throughout the application.
+    /// </summary>
+    public static class Globals
+    {
+#if !DEBUG
+        public const int PASSWORD_MIN_LENGTH = 6;
+#else
+        public const int PASSWORD_MIN_LENGTH = 2;
+#endif
+    }//End globals
 }

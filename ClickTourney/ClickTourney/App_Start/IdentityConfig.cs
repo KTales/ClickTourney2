@@ -53,11 +53,18 @@ namespace ClickTourney
             // Configure validation logic for passwords
             manager.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
+                RequiredLength = Globals.PASSWORD_MIN_LENGTH,
+#if !DEBUG
                 RequireNonLetterOrDigit = true,
                 RequireDigit = true,
                 RequireLowercase = true,
                 RequireUppercase = true,
+#else
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
+#endif
             };
 
             // Configure user lockout defaults
