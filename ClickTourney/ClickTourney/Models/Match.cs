@@ -13,6 +13,7 @@ namespace ClickTourney.Models
         public virtual Participant Player1 { get; set; }
         public virtual Participant Player2 { get; set; }
         public bool Completed { get; set; }
+        public virtual Participant Winner { get; set; }
         public int MatchNumber { get; set; }
         public int PreviousMatch1 { get; set; }
         public int PreviousMatch2 { get; set; }
@@ -26,7 +27,10 @@ namespace ClickTourney.Models
             this.Player2 = player2;
 
             if (player2.Alias == "Bye")
+            {
+                Winner = Player1;
                 Completed = true;
+            }
         }
         public Match(Participant player1, Participant player2, int matchNumber)
         {
@@ -34,7 +38,10 @@ namespace ClickTourney.Models
             this.Player2 = player2;
             this.MatchNumber = matchNumber;
             if (player2.Alias == "Bye")
+            {
+                Winner = Player1;
                 Completed = true;
+            }
         }
         public Match(int matchNumber, int prevMatch1, int prevMatch2)
         {

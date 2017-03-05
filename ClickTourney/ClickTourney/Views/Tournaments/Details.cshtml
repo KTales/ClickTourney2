@@ -6,7 +6,7 @@
 
 <h2>Details</h2>
 
-<div>
+<div id="tournament-details">
     <h4>Tournament</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -33,27 +33,27 @@
         <dd>
             @Html.DisplayFor(model => model.TournamentType)
         </dd>
-        <br />
+
         <dd>
-        <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
+            <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
         </dd>
 
         <dd>
-            <table class="table">
+            <table class="table" id="match-table">
                 <tr>
                     <th>Match #</th>
                     <th>Competitors</th>
                 </tr>
                 @foreach (var match in Model.Matches)
                 {
-                    <tr>
+                    <tr class="match-item">
                         <td>
-                            @Html.DisplayFor(modelItem => match.MatchNumber)
+                            @Html.ActionLink(("Match #" + match.MatchNumber), "Details", "Matches", new { id = match.MatchId }, null)
                         </td>
                         <td>
                             @if (match.Player1 != null)
                             {
-                                @Html.DisplayFor(modelItem => match.Player1)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2)
+                                @Html.DisplayFor(modelItem => match.Player1.Alias)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2.Alias)
                             }
                             else
                             {

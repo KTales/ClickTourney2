@@ -1,0 +1,50 @@
+﻿@model ClickTourney.Models.Match
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Match</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Completed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Completed)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatchNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatchNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousMatch1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousMatch1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PreviousMatch2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PreviousMatch2)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MatchId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
