@@ -4,10 +4,9 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>Match #@Model.MatchNumber</h2>
 
 <div>
-    <h4>Match</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -19,32 +18,52 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.MatchNumber)
+            Competitors
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.MatchNumber)
+            @Html.DisplayFor(model => model.Player1.Alias) VS @Html.DisplayFor(model => model.Player2.Alias)
         </dd>
+        
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PreviousMatch1)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Winner)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PreviousMatch1)
-        </dd>
+            <dd>
+                @if (Model.Winner != null)
+                {
+                    @Html.DisplayFor(model => model.Winner.Alias)
+                }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PreviousMatch2)
-        </dt>
+                @if (User.Identity.Name == Model.Tournament.Owner.UserName)
+                {
+                    <div id="deletestatusupdate">
+                        @using (Html.BeginForm("SaveWinner", "Matches", new { id = Model.MatchId }))
+                        {
+                            <button type="submit" name="command" value="player1">@Model.Player1.Alias</button>
+                            <button type="submit" name="command" value="player2">@Model.Player2.Alias</button>
+                        }
+                    </div>
+                }
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.PreviousMatch2)
-        </dd>
+        @if (Model.PreviousMatch1 != 0)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.PreviousMatch1)
+            </dt>
 
+            <dd>
+                @Html.DisplayFor(model => model.PreviousMatch1)
+            </dd>
+
+            <dd>
+                @Html.DisplayFor(model => model.PreviousMatch2)
+            </dd>
+        }
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.MatchId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Tournament", "Details/" + Model.Tournament.TournamentId, "Tournaments")
 </p>

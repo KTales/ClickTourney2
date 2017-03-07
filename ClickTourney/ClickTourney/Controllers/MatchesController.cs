@@ -29,6 +29,42 @@ namespace ClickTourney.Controllers
             return View(match);
         }
 
+        public ActionResult SaveWinner(int id, string command)
+        {
+            Match match = db.Matches.Find(id);
+
+            if (command.Equals("player1"))
+            {
+                match.Completed = true;
+                match.Winner = match.Player1;
+                db.SaveChanges();
+            }
+            else
+            {
+                match.Completed = true;
+                match.Winner = match.Player2;
+                db.SaveChanges();
+            }
+
+            if(match.Tournament.TournamentType == "Elimination")
+            {
+                var nextMatch = match.Tournament.Matches.FirstOrDefault(m => m.PreviousMatch1 == match.MatchNumber || m.PreviousMatch2 == match.MatchNumber);
+                if (nextMatch != null)
+                {
+                    if (nextMatch.Player1 == null || nextMatch.Player1 == match.Player1 || nextMatch.Player1 == match.Player2)
+                    {
+                        nextMatch.Player1 = match.Winner;
+                    }
+                    else
+                    {
+                        nextMatch.Player2 = match.Winner;
+                    }
+                }
+            }
+            db.SaveChanges();
+            return RedirectToAction("Details/" + match.MatchId, "Matches");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
