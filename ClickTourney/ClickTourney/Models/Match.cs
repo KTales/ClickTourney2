@@ -42,13 +42,34 @@ namespace ClickTourney.Models
                 Winner = Player1;
                 Completed = true;
             }
+            else if(player1.Alias == "Bye")
+            {
+                Winner = Player1;
+                Completed = true;
+            }
         }
+
+        internal void updateElimTourney()
+        {
+            var nextMatch = Tournament.Matches.FirstOrDefault(m => m.PreviousMatch1 == MatchNumber || m.PreviousMatch2 == MatchNumber);
+            if (nextMatch != null)
+            {
+                if (nextMatch.Player1 == null || nextMatch.Player1 == Player1 || nextMatch.Player1 == Player2)
+                {
+                    nextMatch.Player1 = Winner;
+                }
+                else
+                {
+                    nextMatch.Player2 = Winner;
+                }
+            }
+        }
+
         public Match(int matchNumber, int prevMatch1, int prevMatch2)
         {
             this.MatchNumber = matchNumber;
             this.PreviousMatch1 = prevMatch1;
             this.PreviousMatch2 = prevMatch2;
         }
-
     }
 }

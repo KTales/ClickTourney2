@@ -48,18 +48,7 @@ namespace ClickTourney.Controllers
 
             if(match.Tournament.TournamentType == "Elimination")
             {
-                var nextMatch = match.Tournament.Matches.FirstOrDefault(m => m.PreviousMatch1 == match.MatchNumber || m.PreviousMatch2 == match.MatchNumber);
-                if (nextMatch != null)
-                {
-                    if (nextMatch.Player1 == null || nextMatch.Player1 == match.Player1 || nextMatch.Player1 == match.Player2)
-                    {
-                        nextMatch.Player1 = match.Winner;
-                    }
-                    else
-                    {
-                        nextMatch.Player2 = match.Winner;
-                    }
-                }
+                match.updateElimTourney();
             }
             db.SaveChanges();
             return RedirectToAction("Details/" + match.MatchId, "Matches");

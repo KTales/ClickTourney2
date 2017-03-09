@@ -32,6 +32,13 @@ namespace ClickTourney.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Tournament tournament = db.Tournaments.Find(id);
+
+            foreach (Match m in tournament.Matches.Where(m => m.Completed))
+            {
+                m.updateElimTourney();
+                db.SaveChanges();
+            }
+
             if (tournament == null)
             {
                 return HttpNotFound();
@@ -64,6 +71,7 @@ namespace ClickTourney.Controllers
                 db.Tournaments.Add(tournament);
                 tournament.createMatches();
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
