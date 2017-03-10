@@ -6,7 +6,7 @@
 
 <h2>Details</h2>
 
-<div>
+<div id="tournament-details">
     <h4>Tournament</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -33,31 +33,58 @@
         <dd>
             @Html.DisplayFor(model => model.TournamentType)
         </dd>
-        <br />
+
         <dd>
-        <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
+            <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
         </dd>
 
         <dd>
-            <table class="table">
+            <table class="table" id="match-table">
                 <tr>
                     <th>Match #</th>
                     <th>Competitors</th>
+                    <th>Winner</th>
                 </tr>
                 @foreach (var match in Model.Matches)
                 {
-                    <tr>
+                    <tr style="@(match.Completed ? "background-color: forestgreen !important" : null)">
                         <td>
-                            @Html.DisplayFor(modelItem => match.MatchNumber)
+                            @if (match.Player1 == null || match.Player2 == null)
+                            {
+                                <text>Match #@match.MatchNumber</text>
+                            }
+                            else
+                            {
+                                @Html.ActionLink(("Match #" + match.MatchNumber), "Details", "Matches", new { id = match.MatchId }, null)
+                            }
                         </td>
                         <td>
                             @if (match.Player1 != null)
                             {
-                                @Html.DisplayFor(modelItem => match.Player1.Alias)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2.Alias)
+                                @Html.DisplayFor(modelItem => match.Player1.Alias)
                             }
                             else
                             {
-                                <text>Waiting for match </text>@Html.DisplayFor(modelItem => match.PreviousMatch1)<text> and </text> @Html.DisplayFor(modelItem => match.PreviousMatch2)
+                                <text>Winner of </text>@Html.DisplayFor(modelItem => match.PreviousMatch1)
+                            }
+                            <text> VS. </text>
+                            @if (match.Player2 != null)
+                            {
+                                @Html.DisplayFor(modelItem => match.Player2.Alias)
+                            }
+                            else
+                            {
+                                <text>Winner of </text>@Html.DisplayFor(modelItem => match.PreviousMatch2)
+                            }
+                        </td>
+                        <td>
+                            @if (match.Winner != null)
+                            {
+                                @Html.DisplayFor(modelItem => match.Winner.Alias)
+                            }
+                            else
+                            {
+                                <text>Not finished</text>
                             }
                         </td>
                     </tr>
