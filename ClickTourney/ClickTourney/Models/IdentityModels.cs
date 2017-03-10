@@ -31,5 +31,6 @@ namespace ClickTourney.Models
         }
 
         public System.Data.Entity.DbSet<ClickTourney.Models.Tournament> Tournaments { get; set; }
+        public System.Data.Entity.DbSet<ClickTourney.Models.Participant> Participants { get; set; }
     }
 }

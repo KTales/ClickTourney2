@@ -53,7 +53,7 @@
                         <td>
                             @if (match.Player1 != null)
                             {
-                                @Html.DisplayFor(modelItem => match.Player1)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2)
+                                @Html.DisplayFor(modelItem => match.Player1.Alias)<text> VS </text>@Html.DisplayFor(modelItem => match.Player2.Alias)
                             }
                             else
                             {
