@@ -103,10 +103,42 @@ namespace ClickTourney.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(tournament).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(tournament);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        // POST: Participants/edit/Cancer/kys
+        public ActionResult saveParticipants()
+        {
+            try {
+                for (int i = 0; i + 1 < Request.Form.Count; ++i)
+                {
+                    //Get the Id of the current Participant from the form
+                    //Must do it this way or the LINQ expression bitches
+                    int id = Convert.ToInt32(Request.Form[i]);
+                    
+                    //Select a single record by ParticipantId
+                    Participant party = db.Participants.Where(x => x.ParticipantId == id).Single();
+
+                    //If the alias was changed update the record and mark it as changed
+                    if(party.Alias != Request.Form[++i])
+                    {
+                        party.Alias = Request.Form[i];
+                        db.Entry(party).State = EntityState.Modified;
+                    }
+                }
+                db.SaveChanges();
+            } catch(Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Tournaments/Delete/5
