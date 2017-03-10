@@ -61,6 +61,7 @@ namespace ClickTourney.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ChangeUserInformationSuccess ? "Successfully changed your user information."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -333,7 +334,54 @@ namespace ClickTourney.Controllers
             base.Dispose(disposing);
         }
 
-#region Helpers
+
+        //
+        // GET: /Manage/ChangeUserInfo
+        public ActionResult ChangeUserInfo()
+        {
+            var currentUser = UserManager.FindById(User.Identity.GetUserId());
+            ViewBag.FirstName = currentUser.FirstName;
+            ViewBag.LastName = currentUser.LastName;
+            ViewBag.DisplayName = currentUser.DisplayName;
+            return View();
+        }
+
+        //
+        // POST: /Manage/UpdateName
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeUserInfo(ChangeUserInfoViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                ApplicationUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    user.DisplayName = model.DisplayName;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+                    UserManager.Update(user);
+                    //Refresh the cookies.
+                    bool persistant;
+                    if (Session["IsSignInPersistant"] != null)
+                        persistant = (bool)Session["IsSignInPersistant"];
+                    else
+                        persistant = false;
+
+                    SignInManager.SignIn(user, persistant,false);
+                }
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeUserInformationSuccess });
+
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
@@ -381,7 +429,8 @@ namespace ClickTourney.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
-            Error
+            Error,
+            ChangeUserInformationSuccess
         }
 
 #endregion
