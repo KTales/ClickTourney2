@@ -28,18 +28,18 @@ namespace ClickTourney.Models
             Matches = new List<Match>();
         }
 
-        public void createMatches()
+        public void createMatches(List<string> pNames = null)
         {
             switch (TournamentType)
             {
                 case "Round Robin":
-                    buildRoundRobin();
+                    buildRoundRobin(pNames);
                     break;
                 case "Double Round Robin":
-                    buildRoundRobin(true);
+                    buildRoundRobin(pNames, true);
                     break;
                 case "Elimination":
-                    buildElimination();
+                    buildElimination(pNames);
                     break;
                 default:
                     break;
@@ -47,13 +47,15 @@ namespace ClickTourney.Models
 
         }
 
-        private void buildElimination()
+        private void buildElimination(List<string> pNames = null)
         {
+            cleanPNames(ref pNames);
+
             // Create player list
             List<Participant> players = new List<Participant>();
             for (int i = 1; i <= PlayerCount; i++)
             {
-                players.Add(new Participant("Player " + i));
+                players.Add(new Participant(pNames[i-1]));
             }
 
             // Calculate number of byes in first round
@@ -111,12 +113,14 @@ namespace ClickTourney.Models
                 }
             }
         }
-        private void buildRoundRobin(bool isDouble = false)
+
+        private void buildRoundRobin(List<string> pNames = null, bool isDouble = false)
         {
+            cleanPNames(ref pNames);
             List<Participant> players = new List<Participant>();
             for (int i = 1; i <= PlayerCount; i++)
             {
-                players.Add(new Participant("Player " + i));
+                players.Add(new Participant(pNames[i-1]));
             }
 
             if (players.Count % 2 != 0)
@@ -152,5 +156,15 @@ namespace ClickTourney.Models
             }
         }
 
+        private void cleanPNames(ref List<string> pNames)
+        {
+            if (pNames != null && pNames.Count < PlayerCount)
+            {
+                for (int i = pNames.Count; i < PlayerCount; ++i)
+                {
+                    pNames.Add("Player " + (i + 1));
+                }
+            }
+        }
     }
 }

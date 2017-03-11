@@ -68,8 +68,16 @@ namespace ClickTourney.Controllers
 
             if (ModelState.IsValid)
             {
+                // Get the player names entered
+                List<string> playerNames = new List<string>();
+                for(int i=0; i< tournament.PlayerCount; ++i)
+                {
+                    if(Request.Form[i + 3] != "")
+                        playerNames.Add(Request.Form[i + 3]);
+                }
+
                 db.Tournaments.Add(tournament);
-                tournament.createMatches();
+                tournament.createMatches(playerNames);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
