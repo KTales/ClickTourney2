@@ -32,6 +32,13 @@ namespace ClickTourney.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Tournament tournament = db.Tournaments.Find(id);
+
+            foreach (Match m in tournament.Matches.Where(m => m.Completed))
+            {
+                m.updateElimTourney();
+                db.SaveChanges();
+            }
+
             if (tournament == null)
             {
                 return HttpNotFound();
@@ -61,9 +68,18 @@ namespace ClickTourney.Controllers
 
             if (ModelState.IsValid)
             {
+                // Get the player names entered
+                List<string> playerNames = new List<string>();
+                for(int i=0; i< tournament.PlayerCount; ++i)
+                {
+                    if(Request.Form[i + 3] != "")
+                        playerNames.Add(Request.Form[i + 3]);
+                }
+
                 db.Tournaments.Add(tournament);
-                tournament.createMatches();
+                tournament.createMatches(playerNames);
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -86,9 +102,7 @@ namespace ClickTourney.Controllers
             return View(tournament);
         }
 
-        // POST: Tournaments/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -97,10 +111,42 @@ namespace ClickTourney.Controllers
             if (ModelState.IsValid)
             {
                 db.Entry(tournament).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(tournament);
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        // POST: Participants/edit/Cancer/kys
+        public ActionResult updateParticipants()
+        {
+            try {
+                for (int i = 0; i + 1 < Request.Form.Count; ++i)
+                {
+                    //Get the Id of the current Participant from the form
+                    //Must do it this way or the LINQ expression bitches
+                    int id = Convert.ToInt32(Request.Form[i]);
+                    
+                    //Select a single record by ParticipantId
+                    Participant party = db.Participants.Where(x => x.ParticipantId == id).Single();
+
+                    //If the alias was changed update the record and mark it as changed
+                    if(party.Alias != Request.Form[++i])
+                    {
+                        party.Alias = Request.Form[i];
+                        db.Entry(party).State = EntityState.Modified;
+                    }
+                }
+                db.SaveChanges();
+            } catch(Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Tournaments/Delete/5

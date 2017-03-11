@@ -1,16 +1,14 @@
 ﻿@model ClickTourney.Models.Tournament
-
 @{
     ViewBag.Title = "Edit";
 }
 
 <h2>Edit</h2>
 
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Tournament</h4>
         <hr />
@@ -26,18 +24,18 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.PlayerCount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PlayerCount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.PlayerCount, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.TournamentType, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.TournamentType, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.TournamentType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PlayerCount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PlayerCount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PlayerCount, "", new { @class = "text-danger" })
             </div>
         </div>
 
@@ -49,9 +47,46 @@
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+@using (Html.BeginForm("updateParticipants", "Tournaments", FormMethod.Post))
+{
+    //Select all unique (match.player1 && match.player2)
+    var distinctPlayer1 = Model.Matches.Select(x => x.Player1).Distinct();
+    var distinctPlayer2 = Model.Matches.Select(x => x.Player2).Distinct();
+
+    //Combind them into a single list
+    List<ClickTourney.Models.Participant> parti = distinctPlayer1.Union(distinctPlayer2).ToList();
+
+    <div class="form-group">
+        <div class="col-md-offset-0 col-md-10">
+            <a href="#DRow" data-toggle="collapse" data-target="#DRow">Customize Competitors: </a>
+            <div class="col-md-offset-2 col-md-10">
+                <table id="DRow" class="collapse">
+                    @for (int i = 0; i < parti.Count; ++i)
+                {
+                    if (parti[i] != null && parti[i].Alias != "Bye")
+                    {
+                            <tr>
+                                <td>
+                                    <!--Hidden field for the ParticipantId-->
+                                    @Html.HiddenFor(model => parti[i].ParticipantId, new { htmlAttributes = new { @class = "form-control" } })
+                                    <!--Text field for the Participant.Alias-->
+                                    @Html.EditorFor(model => parti[i].Alias, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tr><td><button type="submit">Save Competitors</button></td></tr>
+                </table>
+            </div>
+            <div style="margin-top: 30px;">
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+
+}
+
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
