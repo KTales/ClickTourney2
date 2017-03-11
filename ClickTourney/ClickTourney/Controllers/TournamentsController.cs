@@ -114,7 +114,7 @@ namespace ClickTourney.Controllers
         [HttpPost]
         [Authorize]
         // POST: Participants/edit/Cancer/kys
-        public ActionResult saveParticipants()
+        public ActionResult updateParticipants()
         {
             try {
                 for (int i = 0; i + 1 < Request.Form.Count; ++i)
