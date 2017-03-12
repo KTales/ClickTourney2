@@ -23,7 +23,20 @@
             }
             ]
         </dd>
+        <dt>
+            Update User Information:
+        </dt>
+        <dd>
+            [
+            @Html.ActionLink("Change User Information", "ChangeUserInfo")
+            ]
+        </dd>
         <dt>External Logins:</dt>
+        <dd>
+            @Model.Logins.Count [
+            @Html.ActionLink("Manage", "ManageLogins") ]
+        </dd>
+        <dt>Account Name:</dt>
         <dd>
             @Model.Logins.Count [
             @Html.ActionLink("Manage", "ManageLogins") ]

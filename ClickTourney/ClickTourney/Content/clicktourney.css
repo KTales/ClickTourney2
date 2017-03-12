@@ -48,7 +48,6 @@
     display:block;
 }
 
-
 .tourney-sidebar {
     height:100%;
     width:300px;
@@ -84,4 +83,25 @@
     background-color:#00b0f0;
     color:white;    
     transition:0.5s;
+}
+
+#match-table tr {
+    background-color: #eee !important;
+    border-top: 1px solid #fff !important;
+}
+
+#match-table tr:hover {
+    background-color: #fff !important;
+}
+
+#match-table th {
+    background-color: #fff !important;
+}
+
+#match-table th, #match-table td {
+    padding: 3px 5px !important;
+}
+
+#match-table td:hover {
+    cursor: pointer !important;
 }

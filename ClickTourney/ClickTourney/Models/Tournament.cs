@@ -9,23 +9,37 @@ namespace ClickTourney.Models
 {
     public class Tournament
     {
+        #region DB Fields
+        public int TournamentId { get; set; }
+        public virtual ApplicationUser Owner { get; set; }
+        [Required]
+        public string Name { get; set; }
+        public virtual ICollection<Match> Matches { get; set; }
+        [Range(2, 20, ErrorMessage = "Please enter a number between 3 and 20")]
+        [Required]
+        [DisplayName("# of Participants")]
+        public int PlayerCount { get; set; }
+        [DisplayName("Type")]
+        public string TournamentType { get; set; }
+        #endregion
+
         public Tournament()
         {
             Matches = new List<Match>();
         }
 
-        public void createMatches()
+        public void createMatches(List<string> pNames = null)
         {
             switch (TournamentType)
             {
                 case "Round Robin":
-                    buildRoundRobin();
+                    buildRoundRobin(pNames);
                     break;
                 case "Double Round Robin":
-                    buildRoundRobin(true);
+                    buildRoundRobin(pNames, true);
                     break;
                 case "Elimination":
-                    buildElimination();
+                    buildElimination(pNames);
                     break;
                 default:
                     break;
@@ -33,13 +47,16 @@ namespace ClickTourney.Models
 
         }
 
-        private void buildElimination()
+
+        private void buildElimination(List<string> pNames = null)
         {
+            cleanPNames(ref pNames);
+
             // Create player list
-            List<string> players = new List<string>();
+            List<Participant> players = new List<Participant>();
             for (int i = 1; i <= PlayerCount; i++)
             {
-                players.Add("Player " + i);
+                players.Add(new Participant(pNames[i-1]));
             }
 
             // Calculate number of byes in first round
@@ -51,7 +68,7 @@ namespace ClickTourney.Models
             // Add byes to tourney
             for (int i = 0; i < numByes; ++i)
             {
-                players.Add("Bye");
+                players.Add(new Participant("Bye"));
             }
 
             // Calculate number of required rounds
@@ -59,8 +76,9 @@ namespace ClickTourney.Models
             double roundCount = Math.Floor(Math.Log(totalPlayers) / Math.Log(2));
 
             // get two lists by reversing the second half of players
-            List<string> aPlayers = new List<string>();
-            List<string> bPlayers = new List<string>();
+            List<Participant> aPlayers = new List<Participant>();
+            List<Participant> bPlayers = new List<Participant>();
+
             aPlayers.AddRange(players.Take(totalPlayers / 2));
             bPlayers.AddRange(players.Skip(totalPlayers / 2).Take(totalPlayers / 2).Reverse());
 
@@ -98,22 +116,23 @@ namespace ClickTourney.Models
             }
         }
 
-        public void buildRoundRobin(bool isDouble = false)
+        private void buildRoundRobin(List<string> pNames = null, bool isDouble = false)
         {
-            List<string> players = new List<string>();
+            cleanPNames(ref pNames);
+            List<Participant> players = new List<Participant>();
             for (int i = 1; i <= PlayerCount; i++)
             {
-                players.Add("Player " + i);
+                players.Add(new Participant(pNames[i-1]));
             }
 
             if (players.Count % 2 != 0)
-                players.Add("Bye");
+                players.Add(new Participant("Bye"));
 
             int playersCount = players.Count;
 
             // Our new way
-            List<string> aPlayers = new List<string>();
-            List<string> bPlayers = new List<string>();
+            List<Participant> aPlayers = new List<Participant>();
+            List<Participant> bPlayers = new List<Participant>();
             aPlayers.AddRange(players.Take(playersCount / 2));
             bPlayers.AddRange(players.Skip(playersCount / 2).Take(playersCount / 2));
             int arrLength = aPlayers.Count;
@@ -139,21 +158,15 @@ namespace ClickTourney.Models
             }
         }
 
-        public int TournamentId { get; set; }
-
-        public virtual ApplicationUser Owner { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        public virtual ICollection<Match> Matches { get; set; }
-
-        [Range(2, 20, ErrorMessage = "Please enter a number between 3 and 20")]
-        [Required]
-        [DisplayName("# of Participants")]
-        public int PlayerCount { get; set; }
-
-        [DisplayName("Type")]
-        public string TournamentType { get; set; }
+        private void cleanPNames(ref List<string> pNames)
+        {
+            if (pNames != null && pNames.Count < PlayerCount)
+            {
+                for (int i = pNames.Count; i < PlayerCount; ++i)
+                {
+                    pNames.Add("Player " + (i + 1));
+                }
+            }
+        }
     }
 }

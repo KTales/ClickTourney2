@@ -1,0 +1,69 @@
+﻿@model ClickTourney.Models.Match
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Match #@Model.MatchNumber</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Completed)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Completed)
+        </dd>
+
+        <dt>
+            Competitors
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Player1.Alias) VS @Html.DisplayFor(model => model.Player2.Alias)
+        </dd>
+        
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Winner)
+            </dt>
+
+            <dd>
+                @if (Model.Winner != null)
+                {
+                    @Html.DisplayFor(model => model.Winner.Alias)
+                }
+
+                @if (User.Identity.Name == Model.Tournament.Owner.UserName)
+                {
+                    <div id="deletestatusupdate">
+                        @using (Html.BeginForm("SaveWinner", "Matches", new { id = Model.MatchId }))
+                        {
+                            <button type="submit" name="command" value="player1">@Model.Player1.Alias</button>
+                            <button type="submit" name="command" value="player2">@Model.Player2.Alias</button>
+                        }
+                    </div>
+                }
+            </dd>
+
+        @if (Model.PreviousMatch1 != 0)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.PreviousMatch1)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.PreviousMatch1)
+            </dd>
+
+            <dd>
+                @Html.DisplayFor(model => model.PreviousMatch2)
+            </dd>
+        }
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to Tournament", "Details/" + Model.Tournament.TournamentId, "Tournaments")
+</p>
