@@ -47,6 +47,7 @@ namespace ClickTourney.Models
 
         }
 
+
         private void buildElimination(List<string> pNames = null)
         {
             cleanPNames(ref pNames);
@@ -77,6 +78,7 @@ namespace ClickTourney.Models
             // get two lists by reversing the second half of players
             List<Participant> aPlayers = new List<Participant>();
             List<Participant> bPlayers = new List<Participant>();
+
             aPlayers.AddRange(players.Take(totalPlayers / 2));
             bPlayers.AddRange(players.Skip(totalPlayers / 2).Take(totalPlayers / 2).Reverse());
 
