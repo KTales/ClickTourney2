@@ -45,7 +45,6 @@ namespace ClickTourney.Models
                 default:
                     break;
             }
-
         }
 
 
