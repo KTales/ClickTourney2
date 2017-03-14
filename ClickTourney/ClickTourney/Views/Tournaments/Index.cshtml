@@ -17,14 +17,14 @@ else
         @Html.ActionLink("Create New", "Create")
     </p>
 
-    if (Model.Where(t => t.IsVisible).Any())
+    if (Model.Where(t => t.IsPublic).Any())
     {
         <h3>Public</h3>
-        @Html.Partial("TourneyList", Model.Where(t => t.IsVisible))
+        @Html.Partial("TourneyList", Model.Where(t => t.IsPublic))
     }
-    else
+    if (Model.Where(t => !t.IsPublic).Any())
     {
         <h3>Private</h3>
-        @Html.Partial("TourneyList", Model.Where(t => !t.IsVisible))
+        @Html.Partial("TourneyList", Model.Where(t => !t.IsPublic))
     }
 }
