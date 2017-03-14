@@ -69,6 +69,8 @@ namespace ClickTourney.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        private static int MinLength;
+
         [Required]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }

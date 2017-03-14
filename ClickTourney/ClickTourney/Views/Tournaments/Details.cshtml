@@ -33,6 +33,10 @@
         <dd>
             @Html.DisplayFor(model => model.TournamentType)
         </dd>
+        <br />
+        <dd>
+        <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
+        </dd>
 
         <dd>
             <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
@@ -85,6 +89,7 @@
                             else
                             {
                                 <text>Not finished</text>
+
                             }
                         </td>
                     </tr>
