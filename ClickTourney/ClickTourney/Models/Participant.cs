@@ -18,6 +18,7 @@ namespace ClickTourney.Models
         {
 
         }
+
         public Participant(string alias)
         {
             this.Alias = alias;
