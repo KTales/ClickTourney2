@@ -21,7 +21,8 @@ namespace ClickTourney.Models
         public int PlayerCount { get; set; }
         [DisplayName("Type")]
         public string TournamentType { get; set; }
-        public bool IsVisible;
+        [DisplayName("Public Tournament")]
+        public bool IsPublic { get; set; }
         #endregion
 
         public Tournament()
