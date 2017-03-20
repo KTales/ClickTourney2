@@ -37,6 +37,7 @@ namespace ClickTourney.Models
             this.Player1 = player1;
             this.Player2 = player2;
             this.MatchNumber = matchNumber;
+
             if (player2.Alias == "Bye")
             {
                 Winner = Player1;
