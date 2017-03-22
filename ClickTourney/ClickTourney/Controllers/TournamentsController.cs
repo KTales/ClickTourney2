@@ -70,10 +70,11 @@ namespace ClickTourney.Controllers
             {
                 // Get the player names entered
                 List<string> playerNames = new List<string>();
-                for(int i=0; i< tournament.PlayerCount; ++i)
+                for (int i = 0; i < tournament.PlayerCount; ++i)
                 {
-                    if(Request.Form[i + 3] != "")
-                        playerNames.Add(Request.Form[i + 3]);
+                    if (Request != null && Request.Form != null)
+                        if (Request.Form[i + 3] != "")
+                            playerNames.Add(Request.Form[i + 3]);
                 }
 
                 db.Tournaments.Add(tournament);
@@ -102,6 +103,53 @@ namespace ClickTourney.Controllers
             return View(tournament);
         }
 
+        // GET: Tournaments/Join/5
+        [Authorize]
+        public ActionResult Join(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Tournament tournament = db.Tournaments.Find(id);
+            if (tournament == null)
+            {
+                return HttpNotFound();
+            }
+            return View(tournament);
+        }
+
+        [HttpPost]
+        [Authorize]
+        // POST: Tournaments/Join/tourneyId
+        public ActionResult Join(string button, int id)
+        {
+            Tournament tournament = db.Tournaments.Find(id);
+            if (tournament == null)
+            {
+                return HttpNotFound();
+            }
+
+            try
+            {
+                int pId = Convert.ToInt32(button);
+                Participant p = db.Participants.Where(x => x.ParticipantId == pId).Single();
+
+                string userId = User.Identity.GetUserId();
+                p.User = db.Users.Where(x => x.Id == userId).Single();
+                p.Alias = p.User.DisplayName;
+
+                db.Entry(p).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -118,32 +166,35 @@ namespace ClickTourney.Controllers
             return View(tournament);
         }
 
-
         [HttpPost]
         [Authorize]
-        // POST: Participants/edit/Cancer/kys
+        // POST: Participants/edit/
         public ActionResult updateParticipants()
         {
-            try {
+            try
+            {
                 for (int i = 0; i + 1 < Request.Form.Count; ++i)
                 {
                     //Get the Id of the current Participant from the form
                     //Must do it this way or the LINQ expression bitches
                     int id = Convert.ToInt32(Request.Form[i]);
-                    
+
                     //Select a single record by ParticipantId
                     Participant party = db.Participants.Where(x => x.ParticipantId == id).Single();
 
                     //If the alias was changed update the record and mark it as changed
-                    if(party.Alias != Request.Form[++i])
+                    if (party.Alias != Request.Form[++i])
                     {
                         party.Alias = Request.Form[i];
                         db.Entry(party).State = EntityState.Modified;
                     }
                 }
                 db.SaveChanges();
-            } catch(Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.Message);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             return RedirectToAction("Index");
@@ -172,6 +223,10 @@ namespace ClickTourney.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Tournament tournament = db.Tournaments.Find(id);
+            for (int i = 0; i < tournament.Matches.Count; ++i)
+            {
+                db.Matches.Remove(tournament.Matches.ElementAt(i));
+            }
             db.Tournaments.Remove(tournament);
             db.SaveChanges();
             return RedirectToAction("Index");
