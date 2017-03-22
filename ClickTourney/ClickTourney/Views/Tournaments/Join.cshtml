@@ -1,0 +1,94 @@
+﻿@model ClickTourney.Models.Tournament
+
+@{
+    ViewBag.Title = "Join";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <h2>Join @Model.Name</h2>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <hr />
+            <div class="col-md-offset-2 col-md-10">
+                @{
+                    //Select all unique (match.player1 && match.player2)
+                    var distinctPlayer1 = Model.Matches.Select(x => x.Player1).Distinct();
+                    var distinctPlayer2 = Model.Matches.Select(x => x.Player2).Distinct();
+
+                    //Combind them into a single list
+                    var parti = distinctPlayer1.Union(distinctPlayer2).Where(x => x != null && x.Alias != "Bye");
+                    int usedSpots = parti.Where(x => x.User != null).ToList().Count;
+                    int totalSpots = parti.Count();
+
+                    //TODO - Figure out how the fuq to check against the current user...
+                    bool alreadyExists = false;
+
+                    parti = parti.Where(x => x.User == null);
+                }
+
+                <table class="table" id="xTable">
+                    @if (usedSpots > totalSpots)
+                    {
+                        <tr>
+                            <th>Player Slot @usedSpots / @totalSpots</th>
+                        </tr>
+                        foreach (ClickTourney.Models.Participant cPart in parti)
+                        {
+                            <tr>
+                                <td>
+                                    <!--Label for the Participant.Alias-->
+                                    @Html.DisplayFor(model => cPart.Alias, new { htmlAttributes = new { @class = "form-control" } })
+                                    <button type="submit" name="button" value="@cPart.ParticipantId" class="btn btn-default">Join</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else if (alreadyExists)
+                    {
+                        @Html.Label("You are already in this tournament!");
+                    }
+                    else
+                    {
+                        @Html.Label("No Open Slots in the Tournament!" + usedSpots + "/" + totalSpots);
+                    }
+                </table>
+            </div>
+            <hr />
+        </div>
+
+        <div class="form-group">
+            <hr />
+            <div class="col-md-offset-1 col-md-10">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.TournamentId }) |
+                @Html.ActionLink("Details", "Details", new { id = Model.TournamentId }) |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+                    }
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+function saveUserId()
+{
+    document.getElementById("xTable").innerHTML = "";
+        tbody += '<tr>';
+            tbody += '<td>';
+            tbody += '<input type="text" name="dField' + i + '" style="margin: 2px;"/>';
+            tbody += '</td>'
+        tbody += '</tr>\n';
+        $(tbody).appendTo($('#xTable'));
+}
+</script>
