@@ -221,6 +221,7 @@
     <Content Include="Content\Lampanyctodes_hectoris_%28Hector%27s_lanternfish%292.png" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\thumbsup.png" />
+    <Content Include="dropAllUserData.sql" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -280,6 +281,7 @@
     <Content Include="Views\Tournaments\Index.cshtml" />
     <Content Include="Views\Matches\Details.cshtml" />
     <Content Include="Views\Tournaments\TourneyList.cshtml" />
+    <Content Include="Views\Tournaments\Join.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

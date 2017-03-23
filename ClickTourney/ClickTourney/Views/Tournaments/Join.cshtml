@@ -1,0 +1,82 @@
+﻿@model ClickTourney.Models.Tournament
+@using Microsoft.AspNet.Identity
+
+@{
+        ViewBag.Title = "Join";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-offset-0 col-md-10">
+                <h2>Join @Model.Name</h2>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <hr />
+            <div class="col-md-offset-2 col-md-10">
+                @{
+                    //Select all unique (match.player1 && match.player2)
+                    var parti = Model.Matches.Select(x => x.Player1)
+                        .Union(Model.Matches.Select(x => x.Player2))
+                        .Where(x => x != null && x.Alias != "Bye")
+                        .Distinct();
+
+                    int usedSpots = parti.Where(x => x.User != null).ToList().Count;
+                    int totalSpots = parti.Count();
+
+                    bool alreadyExists = parti.Where(p=> p.User != null).Any(p => p.User.Id == User.Identity.GetUserId());
+
+                    parti = parti.Where(x => x.User == null);
+                }
+
+                <table class="table" id="xTable">
+                    @if (alreadyExists)
+                    {
+                        @Html.Label("You are already in this tournament!");
+                    }
+
+                    else if (usedSpots < totalSpots)
+                    {
+                        <tr>
+                            <th>Player Slot @usedSpots / @totalSpots</th>
+                        </tr>
+                        foreach (ClickTourney.Models.Participant cPart in parti)
+                        {
+                            <tr>
+                                <td>
+                                    <!--Label for the Participant.Alias-->
+                                    @Html.DisplayFor(model => cPart.Alias, new { htmlAttributes = new { @class = "form-control" } })
+                                    <button type="submit" name="button" value="@cPart.ParticipantId" class="btn btn-default">Join</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        @Html.Label("No Open Slots in the Tournament! " + usedSpots + "/" + totalSpots);
+                    }
+                </table>
+            </div>
+            <hr />
+        </div>
+
+        <div class="form-group">
+            <hr />
+            <div class="col-md-offset-1 col-md-10">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.TournamentId }) |
+                @Html.ActionLink("Details", "Details", new { id = Model.TournamentId }) |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

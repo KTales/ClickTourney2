@@ -33,10 +33,6 @@
         <dd>
             @Html.DisplayFor(model => model.TournamentType)
         </dd>
-        <br />
-        <dd>
-        <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
-        </dd>
 
         <dd>
             <dt>@Html.DisplayNameFor(model => model.Matches)</dt>
@@ -63,34 +59,12 @@
                             }
                         </td>
                         <td>
-                            @if (match.Player1 != null)
-                            {
-                                @Html.DisplayFor(modelItem => match.Player1.Alias)
-                            }
-                            else
-                            {
-                                <text>Winner of </text>@Html.DisplayFor(modelItem => match.PreviousMatch1)
-                            }
+                            <text>@(match.Player1 != null ? match.Player1.ToString() : "Winner of " + match.PreviousMatch1)</text>
                             <text> VS. </text>
-                            @if (match.Player2 != null)
-                            {
-                                @Html.DisplayFor(modelItem => match.Player2.Alias)
-                            }
-                            else
-                            {
-                                <text>Winner of </text>@Html.DisplayFor(modelItem => match.PreviousMatch2)
-                            }
+                            <text>@(match.Player2 != null ? match.Player2.ToString() : "Winner of " + match.PreviousMatch2)</text>
                         </td>
                         <td>
-                            @if (match.Winner != null)
-                            {
-                                @Html.DisplayFor(modelItem => match.Winner.Alias)
-                            }
-                            else
-                            {
-                                <text>Not finished</text>
-
-                            }
+                            <text>@(match.Winner != null ? match.Winner.ToString() : "Not Finished")</text>
                         </td>
                     </tr>
                 }

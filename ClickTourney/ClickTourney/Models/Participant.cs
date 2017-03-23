@@ -23,5 +23,10 @@ namespace ClickTourney.Models
         {
             this.Alias = alias;
         }
+
+        public override string ToString()
+        {
+            return User != null ? User.DisplayName : Alias;
+        }
     }
 }
