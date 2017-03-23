@@ -73,8 +73,13 @@ namespace ClickTourney.Controllers
                 for (int i = 0; i < tournament.PlayerCount; ++i)
                 {
                     if (Request != null && Request.Form != null)
+                    {
+                        if (Request.Form.Count < 3)
+                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                         if (Request.Form[i + 3] != "")
                             playerNames.Add(Request.Form[i + 3]);
+                    }
                 }
 
                 db.Tournaments.Add(tournament);

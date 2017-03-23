@@ -31,12 +31,11 @@
 
                     //TODO - Figure out how the fuq to check against the current user...
                     bool alreadyExists = false;
-
                     parti = parti.Where(x => x.User == null);
                 }
 
                 <table class="table" id="xTable">
-                    @if (usedSpots > totalSpots)
+                    @if (usedSpots < totalSpots)
                     {
                         <tr>
                             <th>Player Slot @usedSpots / @totalSpots</th>
@@ -58,7 +57,7 @@
                     }
                     else
                     {
-                        @Html.Label("No Open Slots in the Tournament!" + usedSpots + "/" + totalSpots);
+                        @Html.Label("No Open Slots in the Tournament! " + usedSpots + "/" + totalSpots);
                     }
                 </table>
             </div>
