@@ -153,7 +153,7 @@ namespace ClickTourney.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id=tournament.TournamentId });
         }
 
         [HttpPost]

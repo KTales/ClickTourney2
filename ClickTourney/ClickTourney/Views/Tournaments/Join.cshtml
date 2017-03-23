@@ -1,7 +1,8 @@
 ﻿@model ClickTourney.Models.Tournament
+@using Microsoft.AspNet.Identity
 
 @{
-    ViewBag.Title = "Join";
+        ViewBag.Title = "Join";
 }
 
 @using (Html.BeginForm())
@@ -21,21 +22,26 @@
             <div class="col-md-offset-2 col-md-10">
                 @{
                     //Select all unique (match.player1 && match.player2)
-                    var distinctPlayer1 = Model.Matches.Select(x => x.Player1).Distinct();
-                    var distinctPlayer2 = Model.Matches.Select(x => x.Player2).Distinct();
+                    var parti = Model.Matches.Select(x => x.Player1)
+                        .Union(Model.Matches.Select(x => x.Player2))
+                        .Where(x => x != null && x.Alias != "Bye")
+                        .Distinct();
 
-                    //Combind them into a single list
-                    var parti = distinctPlayer1.Union(distinctPlayer2).Where(x => x != null && x.Alias != "Bye");
                     int usedSpots = parti.Where(x => x.User != null).ToList().Count;
                     int totalSpots = parti.Count();
 
-                    //TODO - Figure out how the fuq to check against the current user...
-                    bool alreadyExists = false;
+                    bool alreadyExists = parti.Where(p=> p.User != null).Any(p => p.User.Id == User.Identity.GetUserId());
+
                     parti = parti.Where(x => x.User == null);
                 }
 
                 <table class="table" id="xTable">
-                    @if (usedSpots < totalSpots)
+                    @if (alreadyExists)
+                    {
+                        @Html.Label("You are already in this tournament!");
+                    }
+
+                    else if (usedSpots < totalSpots)
                     {
                         <tr>
                             <th>Player Slot @usedSpots / @totalSpots</th>
@@ -50,10 +56,6 @@
                                 </td>
                             </tr>
                         }
-                    }
-                    else if (alreadyExists)
-                    {
-                        @Html.Label("You are already in this tournament!");
                     }
                     else
                     {
@@ -73,21 +75,8 @@
             </div>
         </div>
     </div>
-                    }
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
-
-<script type="text/javascript">
-function saveUserId()
-{
-    document.getElementById("xTable").innerHTML = "";
-        tbody += '<tr>';
-            tbody += '<td>';
-            tbody += '<input type="text" name="dField' + i + '" style="margin: 2px;"/>';
-            tbody += '</td>'
-        tbody += '</tr>\n';
-        $(tbody).appendTo($('#xTable'));
-}
-</script>
