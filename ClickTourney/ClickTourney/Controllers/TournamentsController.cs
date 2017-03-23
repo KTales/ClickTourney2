@@ -61,7 +61,7 @@ namespace ClickTourney.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Create([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType")] Tournament tournament)
+        public ActionResult Create([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType, IsPublic")] Tournament tournament)
         {
             string ownerId = User.Identity.GetUserId();
             tournament.Owner = db.Users.FirstOrDefault(x => x.Id == ownerId);
@@ -106,7 +106,7 @@ namespace ClickTourney.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Edit([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType")] Tournament tournament)
+        public ActionResult Edit([Bind(Include = "TournamentId,Name,PlayerCount,TournamentType, IsPublic")] Tournament tournament)
         {
             if (ModelState.IsValid)
             {
