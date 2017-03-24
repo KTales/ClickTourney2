@@ -31,6 +31,13 @@ namespace ClickTourney.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            if (!userIsParticipant(id))
+            {
+                ViewBag.tId = id;
+                return View("~/Views/Error/404.cshtml");
+            }
+
             Tournament tournament = db.Tournaments.Find(id);
 
             foreach (Match m in tournament.Matches.Where(m => m.Completed))
@@ -44,6 +51,25 @@ namespace ClickTourney.Controllers
                 return HttpNotFound();
             }
             return View(tournament);
+        }
+
+        private bool userIsParticipant(int? id)
+        {
+            Tournament tournament = db.Tournaments.Find(id);
+            if (User.Identity.GetUserId() == tournament.Owner.Id)
+                return true;
+
+            foreach (Match m in tournament.Matches)
+            {
+                if (m.Player1.User != null)
+                    if (m.Player1.User.Id == User.Identity.GetUserId())
+                        return true;
+
+                if (m.Player2.User != null)
+                    if (m.Player2.User.Id == User.Identity.GetUserId())
+                        return true;
+            }
+            return false;
         }
 
         // GET: Tournaments/Create
