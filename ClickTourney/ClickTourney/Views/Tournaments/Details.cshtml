@@ -1,8 +1,18 @@
 ﻿@model ClickTourney.Models.Tournament
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = "Details";
 }
+
+@if (User.Identity.GetUserId() == Model.Owner.Id && !Model.IsPublic)
+{
+    @Html.Label("Share this link to your players!: ")
+    <textarea id="copytext">http://www.ClickTourney.com/Tournaments/Join/@Model.TournamentId</textarea>
+    <TEXTAREA ID="holdtext" STYLE="display:none;"></TEXTAREA>
+    <BUTTON onClick="ClipBoard();">Copy to Clipboard</BUTTON>
+}
+
 
 <h2>Details</h2>
 
