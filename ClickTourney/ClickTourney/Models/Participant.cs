@@ -10,6 +10,7 @@ namespace ClickTourney.Models
         #region DB Fields
         public int ParticipantId { get; set; }
         public string Alias { get; set; }
+        public virtual ApplicationUser User { get; set; }
         #endregion
 
         //CTORS
