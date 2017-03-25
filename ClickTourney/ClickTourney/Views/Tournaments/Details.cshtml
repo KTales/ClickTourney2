@@ -7,10 +7,10 @@
 
 @if (User.Identity.GetUserId() == Model.Owner.Id && !Model.IsPublic)
 {
-    @Html.Label("Share this link to your players!: ")
-    <textarea id="copytext">http://www.ClickTourney.com/Tournaments/Join/@Model.TournamentId</textarea>
-    <TEXTAREA ID="holdtext" STYLE="display:none;"></TEXTAREA>
-    <BUTTON onClick="ClipBoard();">Copy to Clipboard</BUTTON>
+    @Html.Label("Share this link to your players!: ", null, htmlAttributes: new { style = "margin: 5px" })
+    @Html.TextBox("copytext", Url.Action("Join", "Tournaments", new { @id = Model.TournamentId }, Request.Url.Scheme), htmlAttributes: new { id = "copytext" })
+    
+    <button onClick="ClipBoard();">Copy to Clipboard</button>
 }
 
 
@@ -86,3 +86,18 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.TournamentId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<script>
+    function ClipBoard() {
+        var copyText = document.querySelector('#copytext');
+        copyText.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Copying text command was ' + msg);
+        } catch (err) {
+            console.log('Oops, unable to copy');
+        }
+    }
+</script>
