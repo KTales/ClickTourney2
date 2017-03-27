@@ -263,6 +263,12 @@ namespace ClickTourney.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Tournaments, it passes the tournaments to render.
+        public ActionResult Public()
+        {
+            return View(db.Tournaments.Where(x => x.IsPublic));
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
