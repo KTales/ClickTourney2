@@ -71,7 +71,9 @@
             <div class="col-md-offset-1 col-md-10">
                 @Html.ActionLink("Edit", "Edit", new { id = Model.TournamentId }) |
                 @Html.ActionLink("Details", "Details", new { id = Model.TournamentId }) |
-                @Html.ActionLink("Back to List", "Index")
+                @Html.ActionLink("Back to List", "Public")
+                <!--Might be a problem when merging with Daniel, just make sure the 
+                       Back to List calls Public-->
             </div>
         </div>
     </div>

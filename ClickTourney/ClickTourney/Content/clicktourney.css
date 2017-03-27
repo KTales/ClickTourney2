@@ -1,14 +1,14 @@
 ﻿.splash-logo {
     max-width:100%;
-    width:auto;
+    width: auto;
     height:auto;
     padding-bottom:20px;
     display:inline-block;
 }
 
 .splash-nav {
-    max-width:200px;
-    margin:10px auto;
+    max-width:260px;
+    margin: auto;
     width:auto;
     height:auto;
     display:block;
@@ -29,7 +29,7 @@
     color:#00b0f0;
     margin:10px;
     display:block;
-    max-width:200px;
+    max-width:250px;
     width:auto;
 }
 
