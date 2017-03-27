@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ClickTourney.Models.Tournament>
+﻿@model ClickTourney.Controllers.IndexList
 
 @{
     ViewBag.Title = "Index";
@@ -6,7 +6,7 @@
 
 <h1>My Tournaments</h1>
 
-@if (!Model.Any())
+@if (!Model.lstOwned.Any())
 {
     <h2>You have not created any tournaments yet!</h2>
     <h3>Create one now! @Html.ActionLink("Click Here!", "Create")</h3>
@@ -17,14 +17,31 @@ else
         @Html.ActionLink("Create New", "Create")
     </p>
 
-    if (Model.Where(t => t.IsPublic).Any())
+    if (Model.lstOwned.Any())
     {
-        <h3>Public</h3>
-        @Html.Partial("TourneyList", Model.Where(t => t.IsPublic))
+        if (Model.lstOwned.Where(t => t.IsPublic).Any())
+        {
+            <h3>Owned Public:</h3>
+            @Html.Partial("TourneyList", Model.lstOwned.Where(t => t.IsPublic))
+        }
+        if(Model.lstOwned.Where(t => !t.IsPublic).Any())
+        {
+            <h3>Owned Private:</h3>
+            @Html.Partial("TourneyList", Model.lstOwned.Where(t => !t.IsPublic))
+        }
     }
-    if (Model.Where(t => !t.IsPublic).Any())
+
+    if (Model.lstPlaying.Any())
     {
-        <h3>Private</h3>
-        @Html.Partial("TourneyList", Model.Where(t => !t.IsPublic))
+        if (Model.lstPlaying.Where(t => t.IsPublic).Any())
+        {
+            <h3>Participating in Public:</h3>
+            @Html.Partial("TourneyList", Model.lstPlaying.Where(t => t.IsPublic))
+        }
+        if(Model.lstPlaying.Where(t => !t.IsPublic).Any())
+        {
+            <h3>Participating in Private:</h3>
+            @Html.Partial("TourneyList", Model.lstPlaying.Where(t => !t.IsPublic))
+        }
     }
 }

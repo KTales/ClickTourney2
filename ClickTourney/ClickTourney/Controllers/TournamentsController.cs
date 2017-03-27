@@ -11,6 +11,12 @@ using Microsoft.AspNet.Identity;
 
 namespace ClickTourney.Controllers
 {
+    public class IndexList
+    {
+        public List<Tournament> lstOwned { get; set; }
+        public List<Tournament> lstPlaying { get; set; }
+    }
+
     public class TournamentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -20,7 +26,10 @@ namespace ClickTourney.Controllers
         public ActionResult Index()
         {
             string currentUserId = User.Identity.GetUserId();
-            return View(db.Tournaments.Where(t => t.Owner.Id == currentUserId).ToList());
+            List<Tournament> lstOwner = db.Tournaments.Where(t => t.Owner.Id == currentUserId).ToList();
+            List<Tournament> lstParti = db.Tournaments.Where(t => t.Matches.Where(m => m.Player1.User.Id == currentUserId || m.Player2.User.Id == currentUserId).ToList().Count > 0).ToList();
+
+            return View(new IndexList() { lstOwned = lstOwner, lstPlaying = lstParti });
         }
 
         // GET: Tournaments/Details/5
