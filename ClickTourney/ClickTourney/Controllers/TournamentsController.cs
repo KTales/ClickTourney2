@@ -135,23 +135,32 @@ namespace ClickTourney.Controllers
         }
 
         // GET: Tournaments/Join/5
-        [Authorize]
         public ActionResult Join(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Tournament tournament = db.Tournaments.Find(id);
+
             if (tournament == null)
             {
                 return HttpNotFound();
             }
-            return View(tournament);
+
+            if (tournament.IsPublic || (!tournament.IsPublic && User.Identity.IsAuthenticated))
+            {
+                return View(tournament);
+            }
+            else
+            {
+                ViewBag.ReturnUrl = Url.Action("Join", "Tournaments", new { id = id });
+                return View("~/Views/Account/Login.cshtml");
+            }
         }
 
         [HttpPost]
-        [Authorize]
         // POST: Tournaments/Join/tourneyId
         public ActionResult Join(string button, int id)
         {
