@@ -133,10 +133,15 @@ namespace ClickTourney.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Tournament tournament = db.Tournaments.Find(id);
             if (tournament == null)
             {
                 return HttpNotFound();
+            }
+            else if (tournament.Owner.Id != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             return View(tournament);
         }
@@ -250,6 +255,10 @@ namespace ClickTourney.Controllers
             if (tournament == null)
             {
                 return HttpNotFound();
+            }
+            else if (tournament.Owner.Id != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             return View(tournament);
         }
