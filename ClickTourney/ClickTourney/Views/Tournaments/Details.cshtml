@@ -83,7 +83,10 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.TournamentId }) |
+    @if (User.Identity.GetUserId() == Model.Owner.Id)
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.TournamentId }) <text> | </text>
+    }
     @Html.ActionLink("Back to List", "Index")
 </p>
 

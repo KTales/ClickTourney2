@@ -11,6 +11,12 @@ using Microsoft.AspNet.Identity;
 
 namespace ClickTourney.Controllers
 {
+    public class IndexList
+    {
+        public List<Tournament> lstOwned { get; set; }
+        public List<Tournament> lstPlaying { get; set; }
+    }
+
     public class TournamentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -20,7 +26,10 @@ namespace ClickTourney.Controllers
         public ActionResult Index()
         {
             string currentUserId = User.Identity.GetUserId();
-            return View(db.Tournaments.Where(t => t.Owner.Id == currentUserId).ToList());
+            List<Tournament> lstOwner = db.Tournaments.Where(t => t.Owner.Id == currentUserId).ToList();
+            List<Tournament> lstParti = db.Tournaments.Where(t => t.Matches.Where(m => m.Player1.User.Id == currentUserId || m.Player2.User.Id == currentUserId).ToList().Count > 0).ToList();
+
+            return View(new IndexList() { lstOwned = lstOwner, lstPlaying = lstParti });
         }
 
         // GET: Tournaments/Details/5
@@ -96,15 +105,13 @@ namespace ClickTourney.Controllers
             {
                 // Get the player names entered
                 List<string> playerNames = new List<string>();
-                for (int i = 0; i < tournament.PlayerCount; ++i)
-                {
-                    if (Request != null && Request.Form != null)
-                    {
-                        if (Request.Form.Count < 3)
-                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-                        if (Request.Form[i + 3] != "")
-                            playerNames.Add(Request.Form[i + 3]);
+                if (Request != null && Request.Form.Count > 5)
+                {
+                    for (int i = 3; i < Request.Form.Count -2; ++i)
+                    {
+                        if (Request.Form[i] != "")
+                            playerNames.Add(Request.Form[i]);
                     }
                 }
 
@@ -126,10 +133,15 @@ namespace ClickTourney.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Tournament tournament = db.Tournaments.Find(id);
             if (tournament == null)
             {
                 return HttpNotFound();
+            }
+            else if (tournament.Owner.Id != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             return View(tournament);
         }
@@ -252,6 +264,10 @@ namespace ClickTourney.Controllers
             if (tournament == null)
             {
                 return HttpNotFound();
+            }
+            else if (tournament.Owner.Id != User.Identity.GetUserId())
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
             return View(tournament);
         }
