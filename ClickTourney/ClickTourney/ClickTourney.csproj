@@ -221,7 +221,6 @@
     <Content Include="Content\Lampanyctodes_hectoris_%28Hector%27s_lanternfish%292.png" />
     <Content Include="Content\logo.png" />
     <Content Include="Content\thumbsup.png" />
-    <Content Include="dropAllUserData.sql" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

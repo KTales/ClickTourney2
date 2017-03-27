@@ -105,15 +105,13 @@ namespace ClickTourney.Controllers
             {
                 // Get the player names entered
                 List<string> playerNames = new List<string>();
-                for (int i = 0; i < tournament.PlayerCount; ++i)
-                {
-                    if (Request != null && Request.Form != null)
-                    {
-                        if (Request.Form.Count < 3)
-                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-                        if (Request.Form[i + 3] != "")
-                            playerNames.Add(Request.Form[i + 3]);
+                if (Request != null && Request.Form.Count > 5)
+                {
+                    for (int i = 3; i < Request.Form.Count -2; ++i)
+                    {
+                        if (Request.Form[i] != "")
+                            playerNames.Add(Request.Form[i]);
                     }
                 }
 
