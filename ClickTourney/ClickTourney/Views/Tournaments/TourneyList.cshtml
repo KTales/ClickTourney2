@@ -31,13 +31,19 @@
                 @Html.DisplayFor(modelItem => item.TournamentType)
             </td>
             <td>
+                <a href="@Url.Action("Join", "Tournaments", new { @id = item.TournamentId }, Request.Url.Scheme)">@Url.Action("Join", "Tournaments", new { @id = item.TournamentId }, Request.Url.Scheme)</a>
+            </td>
+            <td>
                 @if (User.Identity.GetUserId() == item.Owner.Id)
                 {
                     @Html.ActionLink("Edit", "Edit", new { id = item.TournamentId }) <text> | </text>
                     @Html.ActionLink("Details", "Details", new { id = item.TournamentId }) <text> | </text>
                     @Html.ActionLink("Delete", "Delete", new { id = item.TournamentId })
                 }
-                @Html.ActionLink("Details", "Details", new { id = item.TournamentId })
+                else
+                {
+                    @Html.ActionLink("Details", "Details", new { id = item.TournamentId })
+                }
             </td>
         </tr>
     }

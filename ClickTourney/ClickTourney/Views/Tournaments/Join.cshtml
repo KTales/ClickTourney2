@@ -30,9 +30,12 @@
                     int usedSpots = parti.Where(x => x.User != null).ToList().Count;
                     int totalSpots = parti.Count();
 
-                    bool alreadyExists = parti.Where(p=> p.User != null).Any(p => p.User.Id == User.Identity.GetUserId());
-
-                    parti = parti.Where(x => x.User == null);
+                    bool alreadyExists = false;
+                    if (User.Identity.GetUserId() != Model.Owner.Id)
+                    {
+                        alreadyExists = parti.Where(p => p.User != null).Any(p => p.User.Id == User.Identity.GetUserId());
+                        parti = parti.Where(x => x.User == null);
+                    }
                 }
 
                 <table class="table" id="xTable">
