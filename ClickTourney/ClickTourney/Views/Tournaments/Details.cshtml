@@ -68,13 +68,20 @@
                                 @Html.ActionLink(("Match #" + match.MatchNumber), "Details", "Matches", new { id = match.MatchId }, null)
                             }
                         </td>
-                        <td>
-                            <text>@(match.Player1 != null ? match.Player1.ToString() : "Winner of " + match.PreviousMatch1)</text>
+                        @{
+                            var styleString = "";
+                            if( (match.Player1.User != null && match.Player1.User.Id == User.Identity.GetUserId()) || (match.Player2.User != null && match.Player2.User.Id == User.Identity.GetUserId()))
+                            {
+                                styleString = "font-weight: bold";
+                            }
+                        }
+                        <td style="@styleString">
+                            <text>@(match.Player1 != null ? match.Player1.Alias : "Winner of " + match.PreviousMatch1)</text>
                             <text> VS. </text>
-                            <text>@(match.Player2 != null ? match.Player2.ToString() : "Winner of " + match.PreviousMatch2)</text>
+                            <text>@(match.Player2 != null ? match.Player2.Alias : "Winner of " + match.PreviousMatch2)</text>
                         </td>
                         <td>
-                            <text>@(match.Winner != null ? match.Winner.ToString() : "Not Finished")</text>
+                            <text>@(match.Winner != null ? match.Winner.Alias : "Not Finished")</text>
                         </td>
                     </tr>
                 }
