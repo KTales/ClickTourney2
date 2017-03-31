@@ -30,9 +30,12 @@
                     int usedSpots = parti.Where(x => x.User != null).ToList().Count;
                     int totalSpots = parti.Count();
 
-                    bool alreadyExists = parti.Where(p=> p.User != null).Any(p => p.User.Id == User.Identity.GetUserId());
-
-                    parti = parti.Where(x => x.User == null);
+                    bool alreadyExists = false;
+                    if (User.Identity.GetUserId() != Model.Owner.Id)
+                    {
+                        alreadyExists = parti.Where(p => p.User != null).Any(p => p.User.Id == User.Identity.GetUserId());
+                        parti = parti.Where(x => x.User == null);
+                    }
                 }
 
                 <table class="table" id="xTable">
@@ -51,8 +54,19 @@
                             <tr>
                                 <td>
                                     <!--Label for the Participant.Alias-->
-                                    @Html.DisplayFor(model => cPart.Alias, new { htmlAttributes = new { @class = "form-control" } })
-                                    <button type="submit" name="button" value="@cPart.ParticipantId" class="btn btn-default">Join</button>
+                                    @{ 
+                                        var displayName = cPart.ToString();
+                                    }
+                                    @Html.DisplayFor(model => displayName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @if (cPart.User == null)
+                                    {
+                                        <button type="submit" name="button" value="@cPart.ParticipantId" class="btn btn-default">Join</button>
+                                    }
+                                    @if (User.Identity.GetUserId() == Model.Owner.Id && cPart.User != null)
+                                    {
+                                        @Html.ActionLink("Kick User", "RemoveUser", "Tournaments",
+                                            new { @id = cPart.ParticipantId, @tId = Model.TournamentId }, new { @class = "btn" })
+                                    }
                                 </td>
                             </tr>
                         }

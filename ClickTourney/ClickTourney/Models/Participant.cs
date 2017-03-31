@@ -26,7 +26,7 @@ namespace ClickTourney.Models
 
         public override string ToString()
         {
-            return User != null ? User.DisplayName : Alias;
+            return User == null ? "Empty Slot" : Alias;
         }
     }
 }
