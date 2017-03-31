@@ -19,6 +19,8 @@ namespace ClickTourney.Models
         [Required]
         [DisplayName("# of Participants")]
         public int PlayerCount { get; set; }
+        [DisplayName("Slots Available")]
+        public int SlotsAvailable { get; set; }
         [DisplayName("Type")]
         public string TournamentType { get; set; }
         [DisplayName("Public Tournament")]
@@ -159,6 +161,10 @@ namespace ClickTourney.Models
             }
         }
 
+        /// <summary>
+        /// Builds a list of generic player names.
+        /// </summary>
+        /// <param name="pNames"></param>
         private void cleanPNames(ref List<string> pNames)
         {
             if (pNames != null && pNames.Count < PlayerCount)

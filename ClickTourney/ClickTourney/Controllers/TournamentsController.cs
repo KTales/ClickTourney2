@@ -100,7 +100,7 @@ namespace ClickTourney.Controllers
         {
             string ownerId = User.Identity.GetUserId();
             tournament.Owner = db.Users.FirstOrDefault(x => x.Id == ownerId);
-
+            tournament.SlotsAvailable = tournament.PlayerCount;
             if (ModelState.IsValid)
             {
                 // Get the player names entered
@@ -110,8 +110,10 @@ namespace ClickTourney.Controllers
                 {
                     for (int i = 3; i < Request.Form.Count -2; ++i)
                     {
-                        if (Request.Form[i] != "")
+                        if (!string.IsNullOrWhiteSpace(Request.Form[i]))//checks null, empty, and whitespace.
+                        {
                             playerNames.Add(Request.Form[i]);
+                        }
                     }
                 }
 
@@ -216,6 +218,7 @@ namespace ClickTourney.Controllers
                 p.User = db.Users.Where(x => x.Id == userId).Single();
                 p.Alias = p.User.DisplayName;
 
+                --tournament.SlotsAvailable;
                 db.Entry(p).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -316,7 +319,7 @@ namespace ClickTourney.Controllers
         // GET: Tournaments, it passes the tournaments to render.
         public ActionResult Public()
         {
-            return View(db.Tournaments.Where(x => x.IsPublic));
+            return View(db.Tournaments.Where(x => x.IsPublic && x.SlotsAvailable > 0));
         }
 
         protected override void Dispose(bool disposing)
