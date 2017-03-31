@@ -15,7 +15,7 @@ namespace ClickTourney.Models
         [Required]
         public string Name { get; set; }
         public virtual ICollection<Match> Matches { get; set; }
-        [Range(2, 20, ErrorMessage = "Please enter a number between 3 and 20")]
+        [Range(3, 20, ErrorMessage = "Please enter a number between 3 and 20")]
         [Required]
         [DisplayName("# of Participants")]
         public int PlayerCount { get; set; }

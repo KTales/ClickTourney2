@@ -27,8 +27,8 @@
                         .Where(x => x != null && x.Alias != "Bye")
                         .Distinct();
 
-                    int usedSpots = parti.Where(x => x.User != null).ToList().Count;
-                    int totalSpots = parti.Count();
+                    //int usedSpots = parti.Where(x => x.User != null).ToList().Count;
+                    //int totalSpots = parti.Count();
 
                     bool alreadyExists = false;
                     if (User.Identity.GetUserId() != Model.Owner.Id)
@@ -43,11 +43,10 @@
                     {
                         @Html.Label("You are already in this tournament!");
                     }
-
-                    else if (usedSpots < totalSpots)
+                    else if (Model.SlotsAvailable <= Model.PlayerCount)
                     {
                         <tr>
-                            <th>Slots Available @((totalSpots - usedSpots)) / @totalSpots</th>
+                            <th>Slots Available @Model.SlotsAvailable / @Model.PlayerCount</th>
                         </tr>
                         foreach (ClickTourney.Models.Participant cPart in parti)
                         {
@@ -73,7 +72,7 @@
                     }
                     else
                     {
-                        @Html.Label("No Open Slots in the Tournament! " + usedSpots + "/" + totalSpots);
+                        @Html.Label("No Open Slots in the Tournament! " + Model.SlotsAvailable + "/" + Model.PlayerCount);
                     }
                 </table>
             </div>

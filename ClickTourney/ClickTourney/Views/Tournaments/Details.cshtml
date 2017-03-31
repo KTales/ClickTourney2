@@ -70,7 +70,7 @@
                         </td>
                         @{
                             var styleString = "";
-                            if( (match.Player1.User != null && match.Player1.User.Id == User.Identity.GetUserId()) || (match.Player2.User != null && match.Player2.User.Id == User.Identity.GetUserId()))
+                            if( (match.Player1 != null && match.Player1.User != null && match.Player1.User.Id == User.Identity.GetUserId()) || (match.Player2 != null && match.Player2.User != null && match.Player2.User.Id == User.Identity.GetUserId()))
                             {
                                 styleString = "font-weight: bold";
                             }

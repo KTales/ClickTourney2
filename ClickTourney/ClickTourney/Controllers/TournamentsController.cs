@@ -192,6 +192,8 @@ namespace ClickTourney.Controllers
 
             if (player.User != null)
             {
+                Tournament t = db.Tournaments.Find(tId);
+                ++t.SlotsAvailable;
                 player.User = null;
                 db.SaveChanges();
             }
