@@ -172,6 +172,31 @@ namespace ClickTourney.Controllers
             }
         }
 
+        // POST: Tournaments/RemoveUser/5
+        [Authorize]
+        public ActionResult RemoveUser(int? id, int? tId)
+        {
+            if (id == null || tId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Participant player = db.Participants.Find(id);
+
+            if (player == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (player.User != null)
+            {
+                player.User = null;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Join", new { id = tId });
+        }
+
         [HttpPost]
         // POST: Tournaments/Join/tourneyId
         public ActionResult Join(string button, int id)
